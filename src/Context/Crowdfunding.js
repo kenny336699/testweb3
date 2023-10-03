@@ -35,4 +35,19 @@ export const CrowdFundingPrivider = ({ children }) => {
       console.log("contract error", error);
     }
   };
+  const getCampaigns = async () => {
+    const provider = new ethers.providers.JsonRpcProvider();
+    const contract = fetchContract(provider);
+    const campaigns = await contract.getCampaigns();
+    console.log("campaigns", campaigns);
+    const parsedCampaigns = campaigns.map((campaign, i) => ({
+      title: campaign.title,
+      owner: campaign.owner,
+      description: campaign.description,
+      target: ethers.utils.formatEther(campaign.target.toString()),
+      deadline: campaign.deadline.toNumber(),
+      pId: i,
+    }));
+    return parsedCampaigns;
+  };
 };
